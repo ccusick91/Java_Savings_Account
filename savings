@@ -1,0 +1,82 @@
+// Cory Cusick
+
+package Exam;
+import java.text.DecimalFormat;
+import java.util.Scanner;
+public class SavingsAccount {
+    private double annualInterestRate;
+    private double balance;
+    							// Constructor to initialize the account with balance
+    public SavingsAccount(double balance) {
+        this.balance = balance;
+    }
+    							// method to withdraw money
+    public void withdraw(double amount) {
+        balance -= amount;
+    }
+    							// Method to deposit money
+    public void deposit(double amount) {
+        balance += amount;
+    }
+    							// calculate interest
+    public void calculateMonthlyInterest() {
+        double monthlyInterest = balance * (annualInterestRate / 12.0);
+        balance += monthlyInterest;
+    }
+    							// retrieve account balance
+    public double getBalance() {
+        return balance;
+    }
+    							// retrieve annual interest rate
+    public double getAnnualInterestRate() {
+        return annualInterestRate;
+    }
+    							// set annual interest rate
+    public void setAnnualInterestRate(double annualInterestRate) {
+        this.annualInterestRate = annualInterestRate;
+    }
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
+        System.out.print("Enter the savings account's starting balance $: ");
+        double startingBalance = scanner.nextDouble();
+
+        System.out.print("Enter the savings account's annual interest rate %: ");
+        double annualInterestRate = scanner.nextDouble();
+
+        System.out.print("How many months have passed since the account was opened? ");
+        int monthsPassed = scanner.nextInt();
+
+        SavingsAccount savingsAccount = new SavingsAccount(startingBalance);
+        savingsAccount.setAnnualInterestRate(annualInterestRate);
+
+        double totalDeposited = 0.0;
+        double totalWithdrawn = 0.0;
+
+        for (int i = 1; i <= monthsPassed; i++) {
+            System.out.print("Enter the amount deposited during month " + i + ": ");
+            double depositAmount = scanner.nextDouble();
+            savingsAccount.deposit(depositAmount);
+            totalDeposited += depositAmount;
+
+            System.out.print("Enter the amount withdrawn during month " + i + ": ");
+            double withdrawalAmount = scanner.nextDouble();
+            savingsAccount.withdraw(withdrawalAmount);
+            totalWithdrawn += withdrawalAmount;
+
+            savingsAccount.calculateMonthlyInterest();
+        }
+
+        double interestEarned = savingsAccount.getBalance() - startingBalance;
+        
+        								// Print final summary
+        
+        System.out.println("Total deposited: $" + decimalFormat.format(totalDeposited));
+        System.out.println("Total withdrawn: $" + decimalFormat.format(totalWithdrawn));
+        System.out.println("Interest earned: $" + decimalFormat.format(interestEarned));
+        System.out.println("Ending balance: $" + decimalFormat.format(savingsAccount.getBalance()));
+
+        scanner.close();
+    }
+}
